@@ -2,7 +2,7 @@ package model;
 
 public class Pesanan {
     private int id;
-    private String nama_menu;
+    private String id_menu;
     private int jumlah;
     private double harga;
     private double total_harga;
@@ -15,12 +15,12 @@ public class Pesanan {
         this.id = id;
     }
 
-    public String getNamaMenu() {
-        return nama_menu;
+    public String getIdMenu() {
+        return id_menu;
     }
 
-    public void setNamaMenu(String nama_menu) {
-        this.nama_menu = nama_menu;
+    public void setIdMenu(String id_menu) {
+        this.id_menu = id_menu;
     }
 
     public int getJumlah() {
