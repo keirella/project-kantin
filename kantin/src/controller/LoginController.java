@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.jdi.connect.spi.Connection;
 import dao.UserDao;
 import dao.UserDaoImpl;
 import model.User;
@@ -11,6 +12,7 @@ import javax.swing.*;
 public class LoginController {
     private LoginViews view;
     private UserDao userDao;
+    private Connection conn;
 
     public LoginController(LoginViews view) {
         this.view = view;
