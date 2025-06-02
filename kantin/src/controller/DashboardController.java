@@ -58,8 +58,16 @@ public class DashboardController {
             model.addRow(row);
         }
 
-        view.setTableMenuModel(model); // ini baru!
+        view.setTableMenuModel(model); 
+        sembunyikanKolomId();
     }
+    
+    private void sembunyikanKolomId() {
+        view.getTableMenu().getColumnModel().getColumn(0).setMinWidth(0);
+        view.getTableMenu().getColumnModel().getColumn(0).setMaxWidth(0);
+        view.getTableMenu().getColumnModel().getColumn(0).setWidth(0);
+    }
+
 
     private void TampilkanMenu() {
         try {
@@ -85,6 +93,7 @@ public class DashboardController {
             }
 
             view.setTableMenuModel(model);
+            sembunyikanKolomId();
 
             rs.close();
             st.close();
