@@ -35,6 +35,8 @@ public class PesananViews extends javax.swing.JFrame {
 
         setupTable();
         setupListeners();
+        
+        controller.tampilData();
     }
     
     private void setupTable() {
@@ -99,6 +101,7 @@ public class PesananViews extends javax.swing.JFrame {
         EditPesanan = new javax.swing.JButton();
         ClearPesanan = new javax.swing.JButton();
         LogOut = new javax.swing.JButton();
+        Back = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -139,7 +142,7 @@ public class PesananViews extends javax.swing.JFrame {
                 TambahPesananActionPerformed(evt);
             }
         });
-        getContentPane().add(TambahPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, 200, -1));
+        getContentPane().add(TambahPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 200, -1));
 
         DeletePesanan.setBackground(new java.awt.Color(255, 0, 0));
         DeletePesanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -150,7 +153,7 @@ public class PesananViews extends javax.swing.JFrame {
                 DeletePesananActionPerformed(evt);
             }
         });
-        getContentPane().add(DeletePesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 300, 200, -1));
+        getContentPane().add(DeletePesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 200, -1));
 
         Pesan.setBackground(new java.awt.Color(0, 204, 102));
         Pesan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -161,7 +164,7 @@ public class PesananViews extends javax.swing.JFrame {
                 PesanActionPerformed(evt);
             }
         });
-        getContentPane().add(Pesan, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, 200, -1));
+        getContentPane().add(Pesan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 200, -1));
 
         jTable_Pesanan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -187,7 +190,7 @@ public class PesananViews extends javax.swing.JFrame {
                 EditPesananActionPerformed(evt);
             }
         });
-        getContentPane().add(EditPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 200, -1));
+        getContentPane().add(EditPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, 200, -1));
 
         ClearPesanan.setBackground(new java.awt.Color(255, 102, 204));
         ClearPesanan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -198,7 +201,7 @@ public class PesananViews extends javax.swing.JFrame {
                 ClearPesananActionPerformed(evt);
             }
         });
-        getContentPane().add(ClearPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 200, -1));
+        getContentPane().add(ClearPesanan, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, 200, -1));
 
         LogOut.setBackground(new java.awt.Color(153, 0, 51));
         LogOut.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -210,6 +213,17 @@ public class PesananViews extends javax.swing.JFrame {
             }
         });
         getContentPane().add(LogOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, -1, -1));
+
+        Back.setBackground(new java.awt.Color(0, 204, 204));
+        Back.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Back.setForeground(new java.awt.Color(255, 255, 255));
+        Back.setText("Back");
+        Back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Back, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, -1, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon("C:\\Users\\acer\\Downloads\\bg.jpg")); // NOI18N
         jLabel4.setText("jLabel4");
@@ -243,9 +257,9 @@ public class PesananViews extends javax.swing.JFrame {
     }                                     
 
     private void EditPesananActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        controller.clearForm();
         controller.updatePesanan();
-        controller.tampilData();
+        controller.tampilData();   
+        controller.clearForm();
     }                                           
 
     private void ClearPesananActionPerformed(java.awt.event.ActionEvent evt) {                                             
@@ -267,6 +281,13 @@ public class PesananViews extends javax.swing.JFrame {
             System.exit(0);
         }
     }                                      
+
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {                                     
+        DashboardViews dashboard = new DashboardViews();
+        dashboard.setVisible(true);
+        dashboard.setLocationRelativeTo(null);
+        this.dispose();
+    }                                    
 
     /**
      * @param args the command line arguments
@@ -305,6 +326,7 @@ public class PesananViews extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
+    private javax.swing.JButton Back;
     private javax.swing.JButton ClearPesanan;
     private javax.swing.JButton DeletePesanan;
     private javax.swing.JButton EditPesanan;
