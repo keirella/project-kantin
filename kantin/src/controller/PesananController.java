@@ -6,134 +6,120 @@ import model.Pesanan;
 import view.PesananViews;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
 
 public class PesananController {
-
     private PesananViews view;
     private PesananDao dao;
-    private DefaultTableModel tableModel;
-
 
     public PesananController(PesananViews view) {
         this.view = view;
-        dao = new dao.PesananDaoImpl(); 
-        tableModel = (DefaultTableModel) view.getTablePesanan().getModel();
-        tampilData();
-    }
-
-    public void clearForm() {
-        view.getjText_Makanan().setText("");
-        view.getjText_Jumlah().setText("");
+        this.dao = new PesananDaoImpl();
     }
 
     public void tambahPesanan() {
+        String nama = view.getJText_Makanan().getText();
+        String jumlahStr = view.getJText_Jumlah().getText();
+
+        if (nama.isEmpty() || jumlahStr.isEmpty()) {
+            JOptionPane.showMessageDialog(view, "Nama menu dan jumlah harus diisi!");
+            return;
+        }
+
         try {
-            String nama = view.getjText_Makanan().getText().trim();
-            if (nama.isEmpty()) {
-                JOptionPane.showMessageDialog(view, "Nama makanan tidak boleh kosong.");
-                return;
-            }
-
-            int jumlah = Integer.parseInt(view.getjText_Jumlah().getText());
-            if (jumlah <= 0) {
-                JOptionPane.showMessageDialog(view, "Jumlah harus lebih dari 0.");
-                return;
-            }
-
+            int jumlah = Integer.parseInt(jumlahStr);
             int harga = dao.getHargaMakanan(nama);
-            if (harga == 0) {
-                JOptionPane.showMessageDialog(view, "Menu \"" + nama + "\" tidak ditemukan di database.");
-                return;
-            }
-
-            int idMenu = dao.getIdMenuByNama(nama);
-            if (idMenu == 0) {
-                JOptionPane.showMessageDialog(view, "Menu tidak ditemukan di database.");
-                return;
-            }
-
             int total = harga * jumlah;
+            int idMenu = dao.getIdMenuByNama(nama);
 
             Pesanan p = new Pesanan();
-            p.setId_menu(idMenu); 
+            p.setId_menu(idMenu);
             p.setNamaMenu(nama);
             p.setJumlah(jumlah);
-            p.setHarga(harga);
             p.setTotalHarga(total);
 
             dao.tambahPesanan(p);
-            JOptionPane.showMessageDialog(view, "Pesanan berhasil ditambahkan!");
             tampilData();
-            clearForm();
+            clearPesanan();
+
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(view, "Jumlah harus berupa angka.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(view, "Terjadi kesalahan: " + e.getMessage());
+            JOptionPane.showMessageDialog(view, "Jumlah harus berupa angka!");
         }
     }
 
+    public void updatePesanan() {
+        int row = view.getJTable_Pesanan().getSelectedRow();
+        if (row >= 0) {
+            String nama = view.getJText_Makanan().getText();
+            String jumlahStr = view.getJText_Jumlah().getText();
+
+            if (nama.isEmpty() || jumlahStr.isEmpty()) {
+                JOptionPane.showMessageDialog(view, "Nama menu dan jumlah harus diisi!");
+                return;
+            }
+
+            try {
+                int jumlah = Integer.parseInt(jumlahStr);
+                int harga = dao.getHargaMakanan(nama);
+                int total = harga * jumlah;
+                int idMenu = dao.getIdMenuByNama(nama);
+
+                Pesanan p = new Pesanan();
+                p.setId_menu(idMenu);
+                p.setNamaMenu(nama);
+                p.setJumlah(jumlah);
+                p.setTotalHarga(total);
+
+                int Id_Menu = (int) view.getJTable_Pesanan().getValueAt(row, 0);
+                p.setId_menu(Id_Menu);
+
+                dao.updatePesanan(p);
+                tampilData();
+                clearPesanan();
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(view, "Jumlah harus berupa angka!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(view, "Pilih data yang akan diubah!");
+        }
+    }
 
     public void hapusPesanan() {
-        int selectedRow = view.getTablePesanan().getSelectedRow();
-        if (selectedRow >= 0) {
-            int id = (int) tableModel.getValueAt(selectedRow, 0);
-            dao.hapusPesanan(id);
-            JOptionPane.showMessageDialog(view, "Pesanan berhasil dihapus!");
+        int row = view.getJTable_Pesanan().getSelectedRow();
+        if (row >= 0) {
+            int idPesanan = (int) view.getJTable_Pesanan().getValueAt(row, 0);
+            dao.hapusPesanan(idPesanan);
             tampilData();
-            clearForm();
+            clearPesanan();
         } else {
-            JOptionPane.showMessageDialog(view, "Pilih data yang ingin dihapus.");
-        }
-    }
-    
-    public void updatePesanan() {
-        PesananDao dao = new PesananDaoImpl();
-
-        try {
-            Pesanan p = new Pesanan();
-            dao.updatePesanan(p); 
-            JOptionPane.showMessageDialog(null, "Pesanan berhasil diupdate!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Gagal update pesanan: " + e.getMessage());
-        }
-    }
-    
-    public void clearPesanan() {
-        PesananDao dao = new PesananDaoImpl();
-
-        int confirm = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus semua pesanan?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                dao.clearPesanan();
-                JOptionPane.showMessageDialog(null, "Semua pesanan berhasil dihapus!");
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Gagal menghapus pesanan: " + e.getMessage());
-            }
+            JOptionPane.showMessageDialog(view, "Pilih data yang akan dihapus!");
         }
     }
 
     public void tampilData() {
-        List<Pesanan> list = dao.getAllPesanan();
-        tableModel.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) view.getJTable_Pesanan().getModel();
+        model.setRowCount(0); // clear tabel
 
-        double totalSemuaHarga = 0;
-
-        for (Pesanan p : list) {
-            Object[] row = new Object[]{
-                p.getId(),
+        for (Pesanan p : dao.getAllPesanan()) {
+            Object[] row = {
+                p.getId_menu(),
                 p.getNamaMenu(),
                 p.getJumlah(),
                 p.getHarga(),
                 p.getTotalHarga()
             };
-            tableModel.addRow(row);
-
-            totalSemuaHarga += p.getTotalHarga();
+            model.addRow(row);
         }
     }
 
+    public void clearPesanan() {
+        view.getJText_Makanan().setText("");
+        view.getJText_Jumlah().setText("");
+        view.getJText_Makanan().requestFocus();
+    }
+
+    public void clearForm() {
+        clearPesanan();
+        view.getJTable_Pesanan().clearSelection();
+    }
 }
