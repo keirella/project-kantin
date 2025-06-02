@@ -61,16 +61,17 @@ public class PesananController {
                 int jumlah = Integer.parseInt(jumlahStr);
                 int harga = dao.getHargaMakanan(nama);
                 int total = harga * jumlah;
-                int idMenu = dao.getIdMenuByNama(nama);
 
                 Pesanan p = new Pesanan();
-                p.setId_menu(idMenu);
                 p.setNamaMenu(nama);
                 p.setJumlah(jumlah);
                 p.setTotalHarga(total);
 
-                int Id_Menu = (int) view.getJTable_Pesanan().getValueAt(row, 0);
-                p.setId_menu(Id_Menu);
+                int idPesanan = (int) view.getJTable_Pesanan().getValueAt(row, 0);
+                p.setId(idPesanan);
+
+                int idMenu = dao.getIdMenuByNama(nama);
+                p.setId_menu(idMenu);
 
                 dao.updatePesanan(p);
                 tampilData();
@@ -102,7 +103,7 @@ public class PesananController {
 
         for (Pesanan p : dao.getAllPesanan()) {
             Object[] row = {
-                p.getId_menu(),
+                p.getId(),
                 p.getNamaMenu(),
                 p.getJumlah(),
                 p.getHarga(),
