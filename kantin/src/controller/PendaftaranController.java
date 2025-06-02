@@ -39,7 +39,10 @@ public class PendaftaranController {
         if (success) {
             JOptionPane.showMessageDialog(view, "Pendaftaran berhasil. Silakan login.");
             view.dispose();
-            new LoginViews().setVisible(true);
+
+            LoginViews loginViewBaru = new LoginViews();
+            LoginController loginController = new LoginController(loginViewBaru); // inisialisasi controller baru
+            loginViewBaru.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(view, "Pendaftaran gagal.");
         }
